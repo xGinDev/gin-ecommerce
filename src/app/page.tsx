@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Hi</h1>
+      <h1 className='title'>Hi</h1>
       {titles.map(title => <p key={title}>{title}</p>)}
     </div>
   );
