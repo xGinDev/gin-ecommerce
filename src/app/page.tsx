@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT || '')
-    .setProject(process.env.NEXT_PUBLIC_PROJECT || '');
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject('648bd122df386ec45927');
 
   const databases = new Databases(client);
   const [titles, setTitles] = useState<string[]>([]);
 
   useEffect(() => {
     const database = databases.listDocuments(
-      process.env.NEXT_PUBLIC_DATABASE || '',
-      process.env.NEXT_PUBLIC_COLLECTION || ''
+      '648f9ef1850979ebe44e',
+      '648f9efe5de21dc11e95'
     );
 
     database.then(function (response) {
