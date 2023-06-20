@@ -14,11 +14,12 @@ export default function Home() {
     .setEndpoint('https://cloud.appwrite.io/v1')
     .setProject('648bd122df386ec45927');
 
-  const databases = new Databases(client);
   const [titles, setTitles] = useState<Document[]>([]);
   const [images, setImages] = useState<any[]>([]);
 
   useEffect(() => {
+    const databases = new Databases(client);
+
     const fetchDocuments = async () => {
       try {
         const response = await databases.listDocuments(
@@ -41,24 +42,33 @@ export default function Home() {
 
   useEffect(() => {
     const storage = new Storage(client);
-    const bucket= storage.listFiles('6490b7c9c4064bfe3d64');
-    console.log("bucket", bucket);
-    const result = storage.getFilePreview('6490b7c9c4064bfe3d64', '[FILE_ID]');
-  }, []);
-
+    
+    const fetchImages = async () => {
+      try {
+        const response = await storage.listFiles('6490b7c9c4064bfe3d64');
+        const imagePreviews = await Promise.all(
+          response.files.map((image) => storage.getFilePreview('6490b7c9c4064bfe3d64', image.$id))
+        );
+        setImages(imagePreviews);
+        console.log("IMG", imagePreviews);
+        
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
   
-
-  console.log("IMAGES", images);
+    fetchImages();
+  }, []);
+  
 
   return (
     <div>
-      <h1 className='title'>Hi</h1>
-      {/* {images.map((image) => (
+      {images.map((image, index) => (
         <div key={image.$id}>
           <h2>{image.name}</h2>
-          <Image src={Storage.getFilePreviewURL(image.$id)} alt={image.name} width={100} height={100} />
+          <Image src={image.href} alt={image.name} width={100} height={100} />
         </div>
-      ))} */}
+      ))}
       {titles.map((document) => (
         <div key={document.$id}>
           <h2>{document.title}</h2>
@@ -67,4 +77,5 @@ export default function Home() {
       ))}
     </div>
   );
+  
 }

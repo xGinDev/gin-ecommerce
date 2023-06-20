@@ -15,6 +15,7 @@
     "appwrite": "^11.0.0",
     "autoprefixer": "10.4.14",
     "dotenv": "^16.3.1",
+    "encoding": "^0.1.13",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.6",
     "next": "13.4.6",
