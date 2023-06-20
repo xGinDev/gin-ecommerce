@@ -1,7 +1,11 @@
 'use client'
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { Client, Databases, Storage } from 'appwrite';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import './slider.css'
 
 interface Document {
   $id: string;
@@ -42,7 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     const storage = new Storage(client);
-    
+
     const fetchImages = async () => {
       try {
         const response = await storage.listFiles('6490b7c9c4064bfe3d64');
@@ -51,24 +55,46 @@ export default function Home() {
         );
         setImages(imagePreviews);
         console.log("IMG", imagePreviews);
-        
+
       } catch (error) {
         console.error('Error fetching images:', error);
       }
     };
-  
+
     fetchImages();
   }, []);
-  
+
+  const config = {
+    dots: false,
+    infite: false,
+    arrows: false,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infite: true,
+          dots: false
+        },
+      },
+    ],
+  };
 
   return (
     <div>
-      {images.map((image, index) => (
-        <div key={image.$id}>
-          <h2>{image.name}</h2>
-          <Image src={image.href} alt={image.name} width={100} height={100} />
-        </div>
-      ))}
+      <div className="">
+        <Slider {...config}>
+          {images.map((image, index) => (
+            <div key={image.$id}>
+              <h2>{image.name}</h2>
+              <Image src={image.href} alt={image.name} width={1920} height={1100} />
+            </div>
+          ))}
+        </Slider>
+      </div>
       {titles.map((document) => (
         <div key={document.$id}>
           <h2>{document.title}</h2>
@@ -77,5 +103,4 @@ export default function Home() {
       ))}
     </div>
   );
-  
 }
