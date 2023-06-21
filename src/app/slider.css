@@ -1,4 +1,9 @@
+.slick-list {
+    height: 500px;
+}
+
 .slick-slide img {
     width: 100% !important;
-    height: auto;
+    height: 500px;
+    object-fit: contain;
 }
